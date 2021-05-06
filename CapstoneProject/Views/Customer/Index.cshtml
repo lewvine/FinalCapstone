@@ -1,0 +1,68 @@
+﻿@model CapstoneProject.Models.Customer
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Customer Dashboard</h1>
+        <ul>
+            <li><a href="#my-profile">My Profile</a></li>
+            <li><a href="#my-projects">My Projects</a></li>
+        </ul>
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2 id="my-profile">My Profile</h2>
+        <ul>
+            <li><a asp-action="Edit" asp-route-id="@Model.id">Edit Profile</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="data">
+                <p>@Model.FirstName @Model.LastName</p>
+                <p>Name</p>
+            </div>
+            <div class="data">
+                <p>@Model.PhoneNumber</p>
+                <p>Phone</p>
+            </div>
+            <div class="data">
+                <p>@Model.EMailAddress</p>
+                <p>E-Mail</p>
+            </div>
+            <div class="data">
+                <p>@Model.StreetAddress, @Model.CityAddress, @Model.StateAddress, @Model.ZipAddress</p>
+                <p>Address</p>
+            </div>
+        </div>
+        <div class="row col-6">
+            <div><iframe width="350" height="350" loading="lazy" src="@ViewBag.MapUrl"></iframe></div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div onclick="Toggle(this)" id="booked-appointments" class="heading-container">
+        <h2 id="my-projects">My Projects</h2>
+    </div>
+    <div>
+        @if (@Model.Projects.ToList().Count() == 0)
+        {
+            <div class="row data">
+                <p class="col-3">No current projects</p>
+            </div>
+        }
+        else
+        {
+            //Project Information
+            <div class="row data-header">
+                <p class="col-9">Project Name</p>
+            </div>
+            @foreach (Project project in @Model.Projects.ToList())
+            {
+                <div class="row data-row">
+                    <p class="col-9">@project.Name</p>
+                    <p class="col-3"><a asp-action="Details" asp-controller="Project" asp-route-id="@project.id">Details</a></p>
+                </div>
+            }
+        }
+    </div>
+</div>

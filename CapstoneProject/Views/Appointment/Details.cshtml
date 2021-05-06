@@ -1,0 +1,143 @@
+﻿@model CapstoneProject.Models.Appointment
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Appointment Dashboard</h1>
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2>Project Details: <span>@Model.Project.Name</span></h2>
+        <div class="data">
+            <p>@Model.Project.Description</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            @if (this.User.IsInRole("Customer"))
+            {
+                <div class="data">
+                    <p>@Model.Project.Salesperson.FirstName @Model.Project.Salesperson.LastName</p>
+                    <p>Salesperson Name</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Project.Salesperson.PhoneNumber</p>
+                    <p>Salesperson Phone</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Project.Salesperson.EMailAddress</p>
+                    <p>Salesperson E-Mail</p>
+                </div>
+            }
+            else
+            {
+                <div class="data">
+                    <p>@Model.Project.Customer.FirstName @Model.Project.Customer.LastName</p>
+                    <p>Customer Name</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Project.Customer.PhoneNumber</p>
+                    <p>Customer Phone</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Project.Customer.EMailAddress</p>
+                    <p>Customer E-Mail</p>
+                </div>
+            }
+            <div class="data">
+                <p>@Model.Project.StreetAddress<br /> @Model.Project.CityAddress, @Model.Project.StateAddress @Model.Project.ZipAddress</p>
+                <p>Project Address</p>
+            </div>
+        </div>
+        <div class="row col-8">
+            <div class="col-8" style="width: 100%;">
+                <div><iframe width="300" height="300" loading="lazy" src="@ViewBag.MapUrl"></iframe></div>
+            </div>
+            <div class="col-4">
+                <div class="data display">
+                    <p>$@Model.Project.Cost<sup>.00</sup></p>
+                    <p>Estimated Cost</p>
+                </div>
+                <div class="data display">
+                    <img src="@Model.Project.Grass.ImageUrl" />
+                    <p>@Model.Project.Grass.Name</p>
+                    <p>Grass</p>
+                </div>
+                <div class="data display">
+                    <p>@Model.Project.SquareFootage</p>
+                    <p>Square Feet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2>Appointment Details:</h2>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="data">
+                <p>@Model.AppointmentStart</p>
+                <p>Start Time</p>
+            </div>
+            <div class="data">
+                <p>@Model.AppointmentEnd</p>
+                <p>End Time</p>
+            </div>
+            <div class="data">
+                <p>@Model.Project.StreetAddress<br /> @Model.Project.CityAddress, @Model.Project.StateAddress @Model.Project.ZipAddress</p>
+                <p>Project Address</p>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="data">
+                <p>@Model.Notes</p>
+                <p>Appointment Notes</p>
+            </div>
+            <div class="data">
+                <p>@Model.InteractionType</p>
+                <p>Appointment Type</p>
+            </div>
+            @if (@Model.IsCompleted == false)
+            {
+                <form asp-action="Complete">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="id" value="@Model.id"/>
+                    <div class="form-group">
+                        <input asp-for="Notes" class="form-control" />
+                        <label asp-for="Notes" class="control-label"></label>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="InteractionType" class="form-control" />
+                        <label asp-for="InteractionType" class="control-label"></label>
+                        <span asp-validation-for="InteractionType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" value="Complete" class="btn btn-primary">Complete Appointment</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="id" value="@Model.id" />
+                    <div class="form-group">
+                        <input asp-for="Notes" class="form-control" />
+                        <label asp-for="Notes" class="control-label"></label>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="InteractionType" class="form-control" />
+                        <label asp-for="InteractionType" class="control-label"></label>
+                        <span asp-validation-for="InteractionType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" value="Update" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

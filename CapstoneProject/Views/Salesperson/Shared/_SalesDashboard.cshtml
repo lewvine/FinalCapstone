@@ -1,0 +1,42 @@
+﻿@model CapstoneProject.Models.Salesperson
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div style="background-color: yellow; padding: 2rem;">
+    <h2>My Dashboard</h2>
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-3"><strong>Name:</strong></div>
+                <div class="col-9">@Html.DisplayFor(s => s.FirstName) @Html.DisplayFor(s => s.LastName)</div>
+            </div>
+            <div class="row">
+                <div class="col-3"><strong>Phone</strong></div>
+                <div class="col-9">@Html.DisplayFor(s => s.PhoneNumber)</div>
+            </div>
+            <div class="row">
+                <div class="col-3"><strong>E-Mail</strong></div>
+                <div class="col-9">@Html.DisplayFor(s => s.EMailAddress)</div>
+            </div>
+            <div class="row">
+                <div class="col-3"><strong>Address:</strong></div>
+                <div class="col-9">
+                    @Html.DisplayFor(s => s.StreetAddress), @Html.DisplayFor(s => s.CityAddress), @Html.DisplayFor(s => s.ZipAddress) @Html.DisplayFor(s => s.StateAddress)
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <p>Total Sales: $@Model.TotalSales</p>
+            <p>Conversion Rate: @((Model.TotalProjects / Model.TotalOpportunities) * 100)%</p>
+            <p>Total Opportunities: @Model.TotalOpportunities</p>
+            <p>Total Projects: @Model.TotalProjects</p>
+        </div>
+     </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

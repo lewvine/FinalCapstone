@@ -1,0 +1,212 @@
+﻿@model CapstoneProject.Models.Salesperson
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Sales Dashboard</h1>
+        <ul>
+            <li><a href="#my-profile">My Profile</a></li>
+            <li><a href="#booked-appointments">Booked Appointments</a></li>
+            <li><a href="#unbooked-appointments">Unbooked Appointments</a></li>
+            <li><a href="#completed-appointments">Completed Appointments</a></li>
+            <li><a href="#current-opportunities">Current Opportunities</a></li>
+        </ul>
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2 id="my-profile">My Profile</h2>
+        <ul>
+            <li><a asp-action="Edit" asp-route-id="@Model.id">Edit Profile</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="data">
+                <p>@Model.FirstName @Model.LastName</p>
+                <p>Name</p>
+            </div>
+            <div class="data">
+                <p>@Model.PhoneNumber</p>
+                <p>Phone</p>
+            </div>
+            <div class="data">
+                <p>@Model.EMailAddress</p>
+                <p>E-Mail</p>
+            </div>
+            <div class="data">
+                <p>@Model.StreetAddress, @Model.CityAddress, @Model.StateAddress, @Model.ZipAddress</p>
+                <p>Address</p>
+            </div>
+        </div>
+        <div class="row col-8">
+            <div class="col-8" style="width: 100%;">
+                <canvas style="min-height: 300px; min-width: 300px;" class="col-6" id="salesStats"></canvas>
+            </div>
+            <div class="col-4">
+                <div class="data display">
+                    <p>$@ViewBag.CurrentMonthSales<sup>.00</sup></p>
+                    <p>Sales</p>
+                </div>
+                <div class="data display">
+                    <p>@ViewBag.CloseRate<sup>%</sup></p>
+                    <p>Close Rate</p>
+                </div>
+                <div class="data display">
+                    <p>@ViewBag.OpenOpportunities</p>
+                    <p>Open Opportunities</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div onclick="Toggle(this)" id="booked-appointments" class="heading-container">
+        <h2 id="booked-appointments">Booked Appointments</h2>
+    </div>
+    <div>
+        @if (@Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList().Count() == 0)
+        {
+            <div class="row data">
+                <p class="col-3">No appointments</p>
+            </div>
+        }
+        else
+        {
+            <div class="row data-header">
+                <p class="col-3">Date</p>
+                <p class="col-3">Time</p>
+            </div>
+            @foreach (Appointment appt in @Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList())
+            {
+
+                <div class="row data-row">
+                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
+                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
+                    <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="page-section">
+    <div onclick="Toggle(this)" class="heading-container">
+        <h2 id="unbooked-appointments">Unbooked Appointments</h2>
+        <ul>
+            <li><a asp-action="CreateAppointments" asp-controller="Salesperson" asp-route-id="@Model.id">Create Appointments</a></li>
+        </ul>
+    </div>
+    <div>
+        @if (@Model.Appointments.Where(a => a.IsOpen == true).ToList().Count() == 0)
+        {
+            <div class="row data">
+                <p class="col-3">No open appointments</p>
+            </div>
+        }
+        else
+        {
+            <div class="row data-header">
+                <p class="col-3">Date</p>
+                <p class="col-3">Time</p>
+            </div>
+            @foreach (Appointment appt in @Model.Appointments.Where(a => a.IsOpen == true).OrderBy(a => a.AppointmentStart).ToList())
+            {
+                <div class="row data-row">
+                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
+                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="page-section">
+    <div onclick="Toggle(this)" class="heading-container">
+        <h2 id="completed-appointments">Completed Appointments</h2>
+    </div>
+    <div>
+        @if (@Model.Appointments.Where(a => a.IsCompleted == true).ToList().Count() == 0)
+        {
+            <div class="row data">
+                <p class="col-3">No completed appointments</p>
+            </div>
+        }
+        else
+        {
+            <div class="row data-header">
+                <p class="col-3">Date</p>
+                <p class="col-3">Time</p>
+                <p class="col-3">Project</p>
+            </div>
+            @foreach (Appointment appt in @Model.Appointments.Where(a => a.IsCompleted == true).OrderBy(a => a.AppointmentStart).Reverse().ToList())
+            {
+                <div class="row data-row">
+                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
+                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                    <p class="col-3">@appt.Project.Name</p>
+                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="page-section">
+    <div onclick="Toggle(this)" class="heading-container">
+        <h2 id="current-opportunities">Current Opportunities</h2>
+    </div>
+    <div>
+        <div class="row data-header">
+            <p class="col-4">Opportunity Name</p>
+            <p class="col-2">Estimate</p>
+            <p class="col-2">Close Probability</p>
+            <p class="col-2"></p>
+            <p class="col-2"></p>
+        </div>
+        @foreach (Project project in Model.Projects.Where(p => p.IsSold == false).ToList())
+        {
+            <div class="row data-row">
+                <p class="col-4">@project.Name</p>
+                <p class="col-2">$@Math.Round(@project.Cost).00</p>
+                <p class="col-2">@project.CloseNext()%</p>
+                <p class="col-2"><a asp-controller="Project" asp-route-id="@project.id" asp-action="Details">Details</a></p>
+                <p class="col-2"><a asp-controller="Project" asp-route-id="@project.id" asp-action="ConvertToSale">Convert To Sale</a></p>
+            </div>
+        }
+    </div>
+</div>
+<script>
+
+    var weeks =
+        [
+            "This Week",
+            "First Previous",
+            "Second Previous",
+            "Third Previous"
+        ];
+    var salesPerMonth =
+        [
+            @ViewBag.ThirdPreviousWeekSales,
+            @ViewBag.SecondPreviousWeekSales,
+            @ViewBag.FirstPreviousWeekSales,
+            @ViewBag.CurrentWeekSales
+        ];
+
+var data = {
+    labels: weeks,
+    datasets: [{
+        label: 'Weekly Sales',
+        backgroundColor: 'green',
+        color: '#555',
+        borderColor: 'rgb(255,99,132)',
+        data: salesPerMonth
+    }]
+};
+var config = {
+    type: 'bar',
+    data,
+    options: {}
+};
+
+    var myChart = new Chart(
+        document.getElementById('salesStats'),
+        config
+    );
+</script>

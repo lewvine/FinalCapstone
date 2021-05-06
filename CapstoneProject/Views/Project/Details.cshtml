@@ -1,0 +1,150 @@
+﻿@model CapstoneProject.Models.Project
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Project Details</h1>
+        @if (this.User.IsInRole("Salesperson"))
+        {
+            <ul>
+                <li><a asp-action="Edit" asp-route-id="@Model.id">Edit</a></li>
+            </ul>
+        }
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2><span>@Model.Name</span></h2>
+        <div class="data">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            @if (this.User.IsInRole("Customer"))
+            {
+                <div class="data">
+                    <p>@Model.Salesperson.FirstName @Model.Salesperson.LastName</p>
+                    <p>Salesperson Name</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Salesperson.PhoneNumber</p>
+                    <p>Salesperson Phone</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Salesperson.EMailAddress</p>
+                    <p>Salesperson E-Mail</p>
+                </div>
+            }
+            else
+            {
+                <div class="data">
+                    <p>@Model.Customer.FirstName @Model.Customer.LastName</p>
+                    <p>Customer Name</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Customer.PhoneNumber</p>
+                    <p>Customer Phone</p>
+                </div>
+                <div class="data">
+                    <p>@Model.Customer.EMailAddress</p>
+                    <p>Customer E-Mail</p>
+                </div>
+            }
+            <div class="data">
+                <p>@Model.StreetAddress<br /> @Model.CityAddress, @Model.StateAddress @Model.ZipAddress</p>
+                <p>Project Address</p>
+            </div>
+        </div>
+        <div class="row col-8">
+            <div class="col-8" style="width: 100%;">
+                <div><iframe width="300" height="300" loading="lazy" src="@ViewBag.MapUrl"></iframe></div>
+            </div>
+            <div class="col-4">
+                <div class="data display">
+                    <p>$@Model.Cost<sup>.00</sup></p>
+                    <p>Estimated Cost</p>
+                </div>
+                <div class="data display">
+                    <img src="@Model.Grass.ImageUrl"/>
+                    <p>@Model.Grass.Name</p>
+                    <p>Grass</p>
+                </div>
+                <div class="data display">
+                    <p>@Model.SquareFootage</p>
+                    <p>Square Feet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2>Upcoming Appointments:</h2>
+    </div>
+    @if (@Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList().Count() == 0)
+    {
+        <div class="row data">
+            <p>No upcoming appointments scheduled</p>
+        </div>
+    }
+    else
+    {
+        @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false))
+        {
+            <div class="row data-row">
+                <p class="col-3">@appt.AppointmentStart.DayOfWeek , @appt.AppointmentStart.ToString("MMMM d yyyy")</p>
+                <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                @if (this.User.IsInRole("Salesperson"))
+                {
+                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
+                    <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
+                }
+                else
+                {
+                    <p class="col-3"></p>
+                    <p class="col-3"><a asp-action="Delete" asp-route-apptId="@appt.id" asp-route-id="@Model.id">Cancel</a></p>
+                }
+            </div>
+        }
+     }
+    </div>
+<div class="page-section">
+    <div class="heading-container">
+        <h2>Schedule an Appointment:</h2>
+    </div>
+    @foreach (Appointment appt in Model.Salesperson.Appointments.Where(a => a.IsOpen).ToList().OrderBy(a => a.AppointmentStart))
+    {
+<div class="row data-row">
+    <p class="col-3" asp-for="Model.Appointments">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
+    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+    <p class="col-3"><a asp-action="ConfirmAppointment" asp-route-apptId="@appt.id" asp-route-id="@Model.id">Book now</a></p>
+    <p class="col-3"></p>
+</div>
+    }
+</div>
+<div class="page-section">
+    <div class="heading-container">
+        <h3>Past Appointments:</h3>
+    </div>
+    @if (Model.Appointments.Where(a => a.IsCompleted == true).FirstOrDefault() != null)
+    {
+        @if (Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == true) != null)
+        {
+            @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == true).ToList())
+            {
+            <div class="row data-row">
+                <p class="col-3">@appt.AppointmentStart.DayOfWeek , @appt.AppointmentStart.ToString("MMMM d yyyy")</p>
+                <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                <p class="col-3">@appt.Notes</p>
+                <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
+            </div>
+            }
+        }
+    }
+    else
+    {
+        <div class="row data-row">
+            <p>No appointment history to show for this project.</p>
+        </div>
+    }
+</div>
+

@@ -1,0 +1,10 @@
+﻿@model CapstoneProject.Models.Salesperson
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Appointments Dashboard</h1>
+        <ul>
+            <li><a asp-action="Index" asp-controller="Salesperson">Sales Dashboard</a></li>
+            <li><a asp-action="CreateAppointments" asp-controller="Salesperson" asp-route-id="@Model.id">Create Appointments</a></li>
+        </ul>
+    </div>
+</div>

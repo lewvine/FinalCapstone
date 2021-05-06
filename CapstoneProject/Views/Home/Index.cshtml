@@ -1,0 +1,92 @@
+﻿@model CapstoneProject.Models.Project
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div style="padding: 5rem 0;">
+    <h2 style="font-size: 3rem; color: #555; font-family: serif;">Welcome to</h2>
+    <h1 style="color: #3279a8; font-size: 5rem; font-family: 'Alegreya', serif;">Lawn Pros</h1>
+    <h2 style="font-size: 1.5rem; color: darkgreen; width: 40%; line-height: 2rem;">Hill Valley's premier lawn landscape specialist since 1984.&copy;</h2>
+</div>
+<div class="row homepage" style="padding: 3rem 0;">
+    <div class="col-6">
+        <h2>A little about us</h2>
+        <p>
+            Our story began in 1984, when our founder, Lew Vine, took the leap into
+            small business ownership and founded Lawn Pros.  In the past six years
+            we've found our niche as a sod installation specialist.  We install
+            <strong>Tall Fescue</strong>, <strong>Bermuda</strong>, and <strong>Kentucky Bluegrass</strong> lawns.
+        </p>
+    </div>
+    <div class="col-6 text-center">
+        <img src="~/images/profile.jpg" style="width:40%; border-radius: 200px;" />
+        <h4 style="padding-top:2rem;">Lew Vine</h4>
+        <p><strong>Owner</strong></p>
+    </div>
+</div>
+<div style="padding: 5rem 0;">
+    <h2 style="padding-bottom: 2rem;">Getting started is as easy as:</h2>
+    <div class="row">
+        <div class="col-4">
+            <h4 style="color: #555; font-variant: small-caps;">One</h4>
+            <h3 style="color: darkgreen;">Pick a Grass:</h3>
+            <p style="font-size: 1.25rem;">Choose from <strong>Tall Fescue</strong>, <strong>Bermuda</strong>, or <strong>Kentucky Bluegrass</strong>.  Check out the information below to determine which would be the best for your lawn.</p>
+        </div>
+        <div class="col-4">
+            <h4 style="color: #555; font-variant: small-caps;">Two</h4>
+            <h3 style="color: darkgreen;">Measure your area:</h3>
+            <p  style="font-size: 1.25rem;">Get the approximate width and height of your new lawn area.  Don't worry if it's not exact!  One of our experts will confirm the measurements during our first in-person consultation!.</p>
+        </div>
+        <div class="col-4">
+            <h4 style="color: #555; font-variant: small-caps;">Three</h4>
+            <h3 style="color: darkgreen;">Submit a Form!</h3>
+            <p  style="font-size: 1.25rem;">Complete your user sign-up at the top of the page and then select your grass and enter your square footage to get started!</p>
+        </div>
+    </div>
+</div>
+<div style="padding: 5rem 0 15rem 0;">
+    <h2>Let's do it!</h2>
+    <p style="padding-bottom: 2rem; width: 50%; font-size: 1.25rem">To get your project started, register and the top of the page, select your grass, enter your information, and schedule an appointment!</p>
+    <div class="row grass-container">
+        @foreach (var grass in ViewBag.grasses)
+        {
+            <div class="col-4 grass">
+                <div class="grass-image">
+                    <img style="width: 325px; height: 325px;" src=@grass.ImageUrl runat="server" />
+                </div>
+                <div style="padding-top: 1rem;" class="grass-cost">
+                    <p style="font-variant: small-caps; color: #555; font-weight: bold">Starting at</p>
+                    <h3>$@grass.Cost<span>0</span></h3>
+                    <p style="font-variant: small-caps; color: #555; font-weight: bold">per square foot</p>
+                </div>
+                <div class="grass-title">
+                    <h3>@grass.Name</h3>
+                </div>
+                <div class="grass-info" style="min-height: 175px;">
+                    <p style="font-size: 1.25rem;">@grass.Info</p>
+                </div>
+                @if (this.User.IsInRole("Customer"))
+                {
+                    <form style="background-color: yellow; padding: 2rem;" asp-controller="Project" asp-action="create">
+                        <label for="squarefootage">Enter the square footage of your project area:</label>
+                        <input asp-for="GrassID" type="hidden" value="@grass.id" />
+                        <input asp-for="Start" type="hidden" value="@DateTime.Now" />
+                        <input asp-for="SquareFootage" id="squarefootage" type="text" />
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="IsProjectAreaCleared" />Is project area already cleared?
+                            </label>
+                        </div>
+                        <button value="Start a Project" style="width: 100%; height: 50px;" class="btn btn-primary" type="submit">Start a new project with this grass</button>
+                    </form>
+                }
+                else
+                {
+                    <div style="background-color: yellow; padding: 2rem;">
+                        <p>Register as a customer at the top of the page to start a new project with this grass!</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
