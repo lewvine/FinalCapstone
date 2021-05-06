@@ -154,14 +154,29 @@ namespace CapstoneProject.Controllers
                 .Where(p => p.id == project.id)
                 .Include(p=>p.Grass)
                 .FirstOrDefault();
-            projectInDB.Name = project.Name;
-            projectInDB.Description = project.Description;
+            var grass = _context.Grasses.Where(g => g.id == project.GrassID).FirstOrDefault();
+            projectInDB.Grass = grass;
+            projectInDB.GrassID = project.GrassID;
+            projectInDB.IsProjectAreaCleared = project.IsProjectAreaCleared;
             projectInDB.StreetAddress = project.StreetAddress;
             projectInDB.CityAddress = project.CityAddress;
             projectInDB.StateAddress = project.StateAddress;
             projectInDB.ZipAddress = project.ZipAddress;
             projectInDB.SquareFootage = project.SquareFootage;
             projectInDB.Cost = projectInDB.SquareFootage * projectInDB.Grass.Cost;
+            projectInDB.Name = projectInDB.StreetAddress + ": " + projectInDB.SquareFootage.ToString() + " sq/ft of " + projectInDB.Grass.Name;
+            if (projectInDB.IsProjectAreaCleared == false)
+            {
+                projectInDB.Cost = projectInDB.SquareFootage * (projectInDB.Grass.Cost + 1);
+                projectInDB.Description = $"This is a {projectInDB.Grass.Name} project of {projectInDB.SquareFootage} quare feet, located at {projectInDB.StreetAddress}, {projectInDB.CityAddress}, {projectInDB.StreetAddress} {projectInDB.ZipAddress}  The area needs to be cleared."
+                    + $"  The total project cost is expected to be ${projectInDB.Cost}.00.";
+            }
+            else
+            {
+                projectInDB.Cost = projectInDB.SquareFootage * projectInDB.Grass.Cost;
+                projectInDB.Description = $"This is a {projectInDB.Grass.Name} project of {project.SquareFootage}, located at {projectInDB.StreetAddress}, {projectInDB.CityAddress}, {projectInDB.StreetAddress} {projectInDB.ZipAddress}.  The area is ready for grass."
+                    + $"  The total project cost is expected to be {projectInDB.Cost}.";
+            }
             string address = projectInDB.StreetAddress
                  + ", "
                  + projectInDB.CityAddress

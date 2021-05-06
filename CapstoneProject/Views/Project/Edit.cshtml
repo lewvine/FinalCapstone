@@ -23,6 +23,21 @@
                 <span asp-validation-for="SquareFootage" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="IsProjectAreaCleared" class="control-label">Is Project Area Cleared?  Check for YES</label>
+                <input asp-for="IsProjectAreaCleared" class="form-control" />
+                <span asp-validation-for="IsProjectAreaCleared" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="GrassID" class="form-control">
+                    <option value="">Select a Grass</option>
+                    <option value="1">Tall Fescue</option>
+                    <option value="2">Bermuda</option>
+                    <option value="3">Kentucky Bluegrass</option>
+                </select>
+                <label asp-for="GrassID" class="control-label">Grass</label>
+                <span asp-validation-for="GrassID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="StreetAddress" class="control-label">Street</label>
                 <input asp-for="StreetAddress" class="form-control" />
                 <span asp-validation-for="StreetAddress" class="text-danger"></span>
