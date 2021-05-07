@@ -62,8 +62,23 @@ namespace CapstoneProject.Controllers
 
         public ActionResult ConvertToSale(int id)
         {
-            Project project = _context.Projects.Include(p => p.Salesperson).Where(p => p.id == id).FirstOrDefault();
+            Project project = _context.Projects.Include(a=>a.Appointments).Include(p => p.Salesperson).Where(p => p.id == id).FirstOrDefault();
+            var salesperson = _context.Salespeople.Where(s => s.id == project.SalesID).Include(s=>s.Appointments).FirstOrDefault();
             project.IsSold = true;
+            var OpenAppointments = project.Appointments.Where(a => a.IsBooked == true).ToList();
+            foreach(Appointment appt in OpenAppointments)
+            {
+                appt.IsOpen = true;
+                appt.IsBooked = false;
+                appt.IsCompleted = false;
+                appt.ProjID = null;
+                appt.Project = null;
+                appt.InteractionType = "Open appointment";
+                appt.Notes = "This appointment is open";
+                _context.SaveChanges();
+                salesperson.Appointments.Add(appt);
+                _context.SaveChanges();
+            }
             project.Salesperson.TotalProjects += 1;
             project.Salesperson.TotalSales += project.Cost;
             project.ConvertedToSale = DateTime.Now;

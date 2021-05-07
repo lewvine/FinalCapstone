@@ -2,6 +2,14 @@
 <div class="page-section">
     <div class="heading-container">
         <h1>Project Details</h1>
+        @if(@Model.IsSold == false)
+        {
+            <h2>Status: Open Opportunity</h2>
+        }
+        else
+        {
+            <h2>Status: Awaiting Installation</h2>
+        }
         @if (this.User.IsInRole("Salesperson"))
         {
             <ul>
@@ -61,7 +69,14 @@
             <div class="col-4">
                 <div class="data display">
                     <p>$@Model.Cost<sup>.00</sup></p>
-                    <p>Estimated Cost</p>
+                    @if (@Model.IsSold == true)
+                    {
+                        <p>Project Cost</p>
+                    }
+                    else
+                    {
+                        <p>Estimated Cost</p>
+                    }
                 </div>
                 <div class="data display">
                     <img src="@Model.Grass.ImageUrl"/>
@@ -76,51 +91,54 @@
         </div>
     </div>
 </div>
-<div class="page-section">
-    <div class="heading-container">
-        <h2>Upcoming Appointments:</h2>
-    </div>
-    @if (@Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList().Count() == 0)
-    {
-        <div class="row data">
-            <p>No upcoming appointments scheduled</p>
+@if (@Model.IsSold == false)
+{
+    <div class="page-section">
+        <div class="heading-container">
+            <h2>Upcoming Appointments:</h2>
         </div>
-    }
-    else
-    {
-        @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false))
+        @if (@Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList().Count() == 0)
         {
-            <div class="row data-row">
-                <p class="col-3">@appt.AppointmentStart.DayOfWeek , @appt.AppointmentStart.ToString("MMMM d yyyy")</p>
-                <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
-                @if (this.User.IsInRole("Salesperson"))
-                {
-                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
-                    <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
-                }
-                else
-                {
-                    <p class="col-3"></p>
-                    <p class="col-3"><a asp-action="Delete" asp-route-apptId="@appt.id" asp-route-id="@Model.id">Cancel</a></p>
-                }
+            <div class="row data">
+                <p>No upcoming appointments scheduled</p>
             </div>
         }
-     }
+        else
+        {
+            @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false))
+            {
+                <div class="row data-row">
+                    <p class="col-3">@appt.AppointmentStart.DayOfWeek , @appt.AppointmentStart.ToString("MMMM d yyyy")</p>
+                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+                    @if (this.User.IsInRole("Salesperson"))
+                    {
+                        <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
+                        <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
+                    }
+                    else
+                    {
+                        <p class="col-3"></p>
+                        <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
+                    }
+                </div>
+            }
+        }
+        </div>
+    <div class="page-section">
+        <div class="heading-container">
+            <h2>Schedule an Appointment:</h2>
+        </div>
+        @foreach (Appointment appt in Model.Salesperson.Appointments.Where(a => a.IsOpen).ToList().OrderBy(a => a.AppointmentStart))
+        {
+    <div class="row data-row">
+        <p class="col-3" asp-for="Model.Appointments">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
+        <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
+        <p class="col-3"><a asp-action="ConfirmAppointment" asp-route-apptId="@appt.id" asp-route-id="@Model.id">Book now</a></p>
+        <p class="col-3"></p>
     </div>
-<div class="page-section">
-    <div class="heading-container">
-        <h2>Schedule an Appointment:</h2>
+        }
     </div>
-    @foreach (Appointment appt in Model.Salesperson.Appointments.Where(a => a.IsOpen).ToList().OrderBy(a => a.AppointmentStart))
-    {
-<div class="row data-row">
-    <p class="col-3" asp-for="Model.Appointments">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
-    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
-    <p class="col-3"><a asp-action="ConfirmAppointment" asp-route-apptId="@appt.id" asp-route-id="@Model.id">Book now</a></p>
-    <p class="col-3"></p>
-</div>
-    }
-</div>
+}
 <div class="page-section">
     <div class="heading-container">
         <h3>Past Appointments:</h3>

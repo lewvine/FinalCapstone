@@ -44,7 +44,7 @@ namespace CapstoneProject.Controllers
                     .Include(c => c.Projects)
                     .Where(c=>c.IdentityUserId == userId)
                     .FirstOrDefault();
-                if(customer.Projects.Count() == 0)
+                if(customer.Projects.Where(p=>p.IsSold == false).Count() == 0)
                 {
                     return View();
                 }

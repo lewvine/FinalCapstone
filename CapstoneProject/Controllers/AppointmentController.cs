@@ -53,15 +53,21 @@ namespace CapstoneProject.Controllers
 
         public ActionResult Delete(int id)
         {
+
             var appointment = _context.Appointments
                 .Include(a => a.Project)
                 .ThenInclude(p => p.Salesperson)
                 .Where(a => a.id == id)
                 .FirstOrDefault();
-            var salesperson = _context.Salespeople.Where(s => s.id == appointment.Project.Salesperson.id).FirstOrDefault();
-            var appointments = _context.Appointments.ToList();
-            salesperson.Appointments.Remove(appointment);
-            appointments.Remove(appointment);
+            var salesperson = _context.Salespeople.Where(s=>s.id == appointment.Project.SalesID).FirstOrDefault();
+            appointment.IsBooked = false;
+            appointment.IsCompleted = false;
+            appointment.IsOpen = true;
+            appointment.ProjID = null;
+            appointment.Notes = "This appointment is open";
+            appointment.Project = null;
+            _context.SaveChanges();
+            salesperson.Appointments.Add(appointment);
             _context.SaveChanges();
             return RedirectToAction("Index","Home");
         }

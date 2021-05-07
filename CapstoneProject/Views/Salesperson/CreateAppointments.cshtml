@@ -9,7 +9,7 @@
     <div class="col-md-4">
         <div class="data-row">
             <p>
-                Your currently have @Model.Appointments.Count().ToString() appointments booked through @ViewBag.LastAppointment.ToString("dddd, MMMM d, yyyy")
+                Your currently have @Model.Appointments.Count().ToString() appointment slots available through @ViewBag.LastAppointment.ToString("dddd, MMMM d, yyyy")
             </p>
         </div>
         <form asp-action="CreateAppointments" asp-route-id="@Model">

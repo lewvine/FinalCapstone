@@ -217,6 +217,7 @@ namespace CapstoneProject.Migrations
                     TotalPossibleSales = table.Column<double>(type: "float", nullable: false),
                     TotalProjects = table.Column<int>(type: "int", nullable: false),
                     TotalOpportunities = table.Column<int>(type: "int", nullable: false),
+                    NewAppointment = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -316,8 +317,8 @@ namespace CapstoneProject.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "c00203fb-0b14-42a9-b5ea-8c4fdbd066b0", "01ff2793-4b25-4730-a498-f4fb7242e2f4", "Salesperson", "SALESPERSON" },
-                    { "cd78db74-1a48-4bf2-bedb-f0c741c67625", "b0ba3768-bdd5-4ca2-b0bf-d82a7707ef45", "Customer", "CUSTOMER" }
+                    { "2aaf6068-a58e-4468-8497-4840d5ca4708", "7f658c64-df9b-4e6a-b94a-e6635570da7e", "Salesperson", "SALESPERSON" },
+                    { "b24e75d5-f859-4119-b05c-b268e6a408dd", "b2937ea6-7bf9-4cb1-b59a-45c505add6c4", "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(

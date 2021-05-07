@@ -47,21 +47,31 @@
         @if (@Model.Projects.ToList().Count() == 0)
         {
             <div class="row data">
-                <p class="col-3">No current projects</p>
+                <p class="col-3">No project history</p>
             </div>
         }
         else
         {
             //Project Information
             <div class="row data-header">
-                <p class="col-9">Project Name</p>
+                <p class="col-6">Project Name</p>
+                <p class="col-3">Status</p>
             </div>
             @foreach (Project project in @Model.Projects.ToList())
             {
-                <div class="row data-row">
-                    <p class="col-9">@project.Name</p>
-                    <p class="col-3"><a asp-action="Details" asp-controller="Project" asp-route-id="@project.id">Details</a></p>
-                </div>
+            <div class="row data-row">
+                <p class="col-6">@project.Name</p>
+                @if (project.IsSold == true)
+                {
+                    <p class="col-3">Awaiting Installation</p>
+                }
+                else
+                {
+                    <p class="col-3">Open Opportunity</p>
+
+                }
+        <p class="col-3"><a asp-action="Details" asp-controller="Project" asp-route-id="@project.id">Details</a></p>
+    </div>
             }
         }
     </div>
