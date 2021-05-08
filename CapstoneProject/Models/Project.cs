@@ -82,17 +82,22 @@ namespace CapstoneProject.Models
             }
             else
             {
-                var inPerson = this.Appointments.Where(a => a.InteractionType == "In person").Any();
-                if (inPerson)
+                var initial= this.Appointments.Where(a => a.InteractionType == "initial").Any();
+                if (initial)
                 {
-                    int number = this.Appointments.Where(a => a.InteractionType == "In person").Count();
+                    probability += 30;
+                }
+                var followup = this.Appointments.Where(a => a.InteractionType == "followup").Any();
+                if (followup)
+                {
+                    int number = this.Appointments.Where(a => a.InteractionType == "followup").Count();
                     switch (number)
                     {
                         case 1:
                             probability += 30;
                             break;
                         case 2:
-                            probability += 40;
+                            probability += 10;
                             break;
                         case 3:
                             probability += 10;
@@ -105,10 +110,10 @@ namespace CapstoneProject.Models
                             break;
                     }
                 }
-                var phoneCall = this.Appointments.Where(a => a.InteractionType == "Phone call").Any();
+                var phoneCall = this.Appointments.Where(a => a.InteractionType == "phone").Any();
                 if (phoneCall)
                 {
-                    int number = this.Appointments.Where(a => a.InteractionType == "Phone call").Count();
+                    int number = this.Appointments.Where(a => a.InteractionType == "phone").Count();
                     switch (number)
                     {
                         case 1:

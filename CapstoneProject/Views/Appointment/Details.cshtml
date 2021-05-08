@@ -100,43 +100,53 @@
             </div>
             @if (@Model.IsCompleted == false)
             {
-                <form asp-action="Complete">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="id" value="@Model.id"/>
-                    <div class="form-group">
-                        <input asp-for="Notes" class="form-control" />
-                        <label asp-for="Notes" class="control-label"></label>
-                        <span asp-validation-for="Notes" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input asp-for="InteractionType" class="form-control" />
-                        <label asp-for="InteractionType" class="control-label"></label>
-                        <span asp-validation-for="InteractionType" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" value="Complete" class="btn btn-primary">Complete Appointment</button>
-                    </div>
-                </form>
+        <form asp-action="Complete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" value="@Model.id" />
+            <div class="form-group">
+                <input asp-for="Notes" class="form-control" />
+                <label asp-for="Notes" class="control-label"></label>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="InteractionType" class="form-control">
+                    <option value="">Select an Interaction Type</option>
+                    <option value="initial">Initial consultation</option>
+                    <option value="followup">In person follow-up</option>
+                    <option value="phone">Phone call</option>
+                </select>
+                <label asp-for="InteractionType" class="control-label">Grass</label>
+                <span asp-validation-for="InteractionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Complete" class="btn btn-primary">Complete Appointment</button>
+            </div>
+        </form>
             }
             else
             {
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="id" value="@Model.id" />
-                    <div class="form-group">
-                        <input asp-for="Notes" class="form-control" />
-                        <label asp-for="Notes" class="control-label"></label>
-                        <span asp-validation-for="Notes" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input asp-for="InteractionType" class="form-control" />
-                        <label asp-for="InteractionType" class="control-label"></label>
-                        <span asp-validation-for="InteractionType" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" value="Update" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" value="@Model.id" />
+            <div class="form-group">
+                <input asp-for="Notes" class="form-control" />
+                <label asp-for="Notes" class="control-label"></label>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="InteractionType" class="form-control">
+                    <option value="">Select an Interaction Type</option>
+                    <option value="initial">Initial consultation</option>
+                    <option value="followup">In person follow-up</option>
+                    <option value="phone">Phone call</option>
+                </select>
+                <label asp-for="InteractionType" class="control-label">Grass</label>
+                <span asp-validation-for="InteractionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Update" class="btn btn-primary">Update</button>
+            </div>
+        </form>
             }
         </div>
     </div>
