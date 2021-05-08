@@ -75,7 +75,7 @@
                 <p class="col-3">Date</p>
                 <p class="col-3">Time</p>
             </div>
-            @foreach (Appointment appt in @Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList())
+            @foreach (Appointment appt in @Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).OrderBy(a=>a.AppointmentStart).ToList())
             {
 
                 <div class="row data-row">
