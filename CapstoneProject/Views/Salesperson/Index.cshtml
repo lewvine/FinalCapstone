@@ -151,6 +151,9 @@
 <div class="page-section">
     <div onclick="Toggle(this)" class="heading-container">
         <h2 id="current-opportunities">Current Opportunities</h2>
+        <ul>
+            <li><a asp-action="SalespersonCreate" asp-controller="Project" asp-route-id="@Model.id">Create Project</a></li>
+        </ul>
     </div>
     <div>
         <div class="row data-header">

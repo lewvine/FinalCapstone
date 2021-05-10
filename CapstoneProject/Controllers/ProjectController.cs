@@ -86,11 +86,49 @@ namespace CapstoneProject.Controllers
             return RedirectToAction("Index", "Salesperson");
 
         }
-
-        // GET: ProjectController/Create
-        public ActionResult Create()
+        [HttpGet]
+        public ActionResult SalespersonCreate() 
         {
+            ViewBag.Customers = _context.Customers.ToList();
             return View();
+        }
+
+        [HttpPost]
+        // GET: ProjectController/Create
+        public ActionResult SalespersonCreate(Project project)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var salesperson = _context.Salespeople.Where(s => s.IdentityUserId == userId).FirstOrDefault();
+            project.Salesperson = salesperson;
+            project.SalesID = salesperson.id;
+            project.IsSold = false;
+            project.Grass = _context.Grasses.Where(g => g.id == project.GrassID).FirstOrDefault();
+            project.Name = project.StreetAddress + ": " + project.SquareFootage.ToString() + " sq/ft of " + project.Grass.Name;
+            if (project.IsProjectAreaCleared == false)
+            {
+                project.Cost = project.SquareFootage * (project.Grass.Cost + 1);
+                project.Description = $"This is a {project.Grass.Name} project of {project.SquareFootage} quare feet, located at {project.StreetAddress}, {project.CityAddress}, {project.StreetAddress} {project.ZipAddress}  The area needs to be cleared."
+                    + $"  The total project cost is expected to be ${project.Cost}.00.";
+            }
+            else
+            {
+                project.Cost = project.SquareFootage * project.Grass.Cost;
+                project.Description = $"This is a {project.Grass.Name} project of {project.SquareFootage}, located at {project.StreetAddress}, {project.CityAddress}, {project.StreetAddress} {project.ZipAddress}.  The area is ready for grass."
+                    + $"  The total project cost is expected to be {project.Cost}.";
+            }
+            string address = project.StreetAddress
+                 + ", "
+                 + project.CityAddress
+                 + ", "
+                 + project.StateAddress
+                 + " "
+                 + project.ZipAddress;
+            project.SetGeocode(address);
+            project.Salesperson.TotalPossibleSales += project.Cost;
+            project.Salesperson.TotalOpportunities += 1;
+            _context.Projects.Add(project);
+            _context.SaveChanges();
+            return RedirectToAction("Details", project);
         }
 
         // POST: ProjectController/Create
