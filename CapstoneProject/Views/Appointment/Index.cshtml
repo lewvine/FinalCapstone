@@ -8,47 +8,82 @@
         </ul>
     </div>
     @* This is our day column *@
-<div class="row">
-    <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
-        <h3>Monday</h3>
-        <h4>@ViewBag.SelectedWeek[1].Date</h4>
-        <div class="appointments-for-day">
-            <p>There are no appointments for today</p>
+    <div class="calendar-container" style="border: 1px solid #555">
+        <div class="row" style="margin-top: 2rem; padding: 2rem; border: 1px solid #555; text-align: center; background-color: #3279a8;">
+            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="-7">
+                <i class="fas fa-arrow-alt-circle-left fa-3x"></i>
+            </a>
+            <h2 class="col-8" style="color: white;">Calendar for: @ViewBag.SelectedWeek[0].Date.ToString("MM/dd/yyyy") - @ViewBag.SelectedWeek[4].Date.ToString("MM/dd/yyyy")</h2>
+            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="7">
+                <i class="fas fa-arrow-alt-circle-right fa-3x"></i>
+            </a>
         </div>
-    </div>
-    <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
-        <h3>Tuesday</h3>
-        <h4>@ViewBag.SelectedWeek[2].Date</h4>
-        <div class="appointments-for-day">
-            <p>There are no appointments for today</p>
-        </div>
-    </div>
-    <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
-        <h3>Wednesday</h3>
-        <h4>@ViewBag.SelectedWeek[3].Date</h4>
-        <div class="appointments-for-day">
-            @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[3].Date).ToList())
+        <div class="row" style="margin-top: 3rem;">
+            @for (int i = 1; i <= 5; i++)
             {
-                <div>
-                    <h4>@appt.AppointmentStart</h4>
-                </div>
+
+                //If current day
+                @if (@ViewBag.SelectedWeek[i].Date == DateTime.Today)
+                {
+                    <div class="col-2" style="margin-right: 2rem; background-color: #999; padding-top: 1rem;">
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="color: white;">@ViewBag.SelectedWeek[i].Date.DayOfWeek</h3>
+                            <h4 style="color: white;">@ViewBag.SelectedWeek[i].Date.ToString("MM/dd/yyyy")</h4>
+                        </div>
+                        <div class="appointments-for-day">
+                            @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
+                            {
+                                @if (appt.IsBooked == true)
+                                {
+                                    <div style="background-color: #3279a8; padding: .5rem; min-height: 6rem; border-radius: .25rem; ">
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <h4 style="font-size: .875rem; color: white;">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</h4>
+                                            <p style="font-size: .75rem; color: white;">@appt.Project.StreetAddress <br /> @appt.Project.CityAddress , @appt.Project.StateAddress @appt.Project.ZipAddress</p>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin: 1rem 0; background-color: #555; min-height: 6rem; padding: .5rem; border-radius: .25rem;">
+                                        <h4 style="font-size: .875rem; color: white; background-color: #555;">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</h4>
+                                        <p style="color: white;">Open appointment</p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-2" style="margin-right: 2rem; padding-top: 1rem;">
+                        <div style="margin-bottom: 2rem;">
+                            <h3>@ViewBag.SelectedWeek[i].Date.DayOfWeek</h3>
+                            <h4>@ViewBag.SelectedWeek[i].Date.ToString("MM/dd/yyyy")</h4>
+                        </div>
+                        <div class="appointments-for-day">
+                            @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
+                            {
+                                @if (appt.IsBooked == true)
+                                {
+                                    <div style="background-color: blue; padding: .5rem; border-radius: .25rem; ">
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <h4 style="font-size: .875rem; color: white; background-color: blue;">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</h4>
+                                            <p style="color: white;">Booked appointment</p>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin: 1rem 0; background-color: #555; padding: .5rem; border-radius: .25rem;">
+                                        <h4 style="font-size: .875rem; color: white; background-color: #555;">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</h4>
+                                        <p style="color: white;">Open appointment</p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
             }
-            <p>There are no appointments for today</p>
         </div>
     </div>
-    <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
-        <h3>Thursday</h3>
-        <h4>@ViewBag.SelectedWeek[4].Date</h4>
-        <div class="appointments-for-day">
-            <p>There are no appointments for today</p>
-        </div>
     </div>
-    <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
-        <h3>Friday</h3>
-        <h4>@ViewBag.SelectedWeek[5].Date</h4>
-        <div class="appointments-for-day">
-            <p>There are no appointments for today</p>
-        </div>
-    </div>
-</div>
-</div>

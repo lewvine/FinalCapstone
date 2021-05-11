@@ -19,7 +19,7 @@ namespace CapstoneProject.Controllers
             _context = context;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int addDays)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var salesperson = _context.Salespeople
@@ -30,12 +30,10 @@ namespace CapstoneProject.Controllers
                 .Include(s => s.Appointments)
                 .Where(s => s.IdentityUserId == userId)
                 .FirstOrDefault();
-
             Day day = new Day();
-            var currentDay = DateTime.Today.DayOfWeek.ToString();
-            ViewBag.SelectedWeek = day.SelectWeek(currentDay);
-            var list = salesperson.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[3].Date).ToList();
-
+            var currentDay = DateTime.Today.AddDays(addDays);
+            ViewBag.Count = 0;
+            ViewBag.SelectedWeek = day.SelectWeek(addDays);
             return View(salesperson);
         }
 
