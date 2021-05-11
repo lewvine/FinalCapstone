@@ -32,8 +32,9 @@ namespace CapstoneProject.Controllers
                 .FirstOrDefault();
 
             Day day = new Day();
-            var currentDay = DateTime.Now.DayOfWeek.ToString();
+            var currentDay = DateTime.Today.DayOfWeek.ToString();
             ViewBag.SelectedWeek = day.SelectWeek(currentDay);
+            var list = salesperson.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[3].Date).ToList();
 
             return View(salesperson);
         }

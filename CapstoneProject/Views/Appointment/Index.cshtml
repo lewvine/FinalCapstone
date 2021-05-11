@@ -11,35 +11,41 @@
 <div class="row">
     <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
         <h3>Monday</h3>
-        <h4>Date</h4>
+        <h4>@ViewBag.SelectedWeek[1].Date</h4>
         <div class="appointments-for-day">
             <p>There are no appointments for today</p>
         </div>
     </div>
     <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
         <h3>Tuesday</h3>
-        <h4>Date</h4>
+        <h4>@ViewBag.SelectedWeek[2].Date</h4>
         <div class="appointments-for-day">
             <p>There are no appointments for today</p>
         </div>
     </div>
     <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
         <h3>Wednesday</h3>
-        <h4>Date</h4>
+        <h4>@ViewBag.SelectedWeek[3].Date</h4>
         <div class="appointments-for-day">
+            @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[3].Date).ToList())
+            {
+                <div>
+                    <h4>@appt.AppointmentStart</h4>
+                </div>
+            }
             <p>There are no appointments for today</p>
         </div>
     </div>
     <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
         <h3>Thursday</h3>
-        <h4>Date</h4>
+        <h4>@ViewBag.SelectedWeek[4].Date</h4>
         <div class="appointments-for-day">
             <p>There are no appointments for today</p>
         </div>
     </div>
     <div class="col-2" style="border: 1px solid #555; padding: .5rem;">
         <h3>Friday</h3>
-        <h4>Date</h4>
+        <h4>@ViewBag.SelectedWeek[5].Date</h4>
         <div class="appointments-for-day">
             <p>There are no appointments for today</p>
         </div>
