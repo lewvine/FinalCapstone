@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CapstoneProject.Controllers
@@ -16,6 +17,25 @@ namespace CapstoneProject.Controllers
         public AppointmentController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public ActionResult Index()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var salesperson = _context.Salespeople
+                .Include(s => s.Projects)
+                   .ThenInclude(p => p.Customer)
+                .Include(s => s.Projects)
+                    .ThenInclude(p => p.Grass)
+                .Include(s => s.Appointments)
+                .Where(s => s.IdentityUserId == userId)
+                .FirstOrDefault();
+
+            Day day = new Day();
+            var currentDay = DateTime.Now.DayOfWeek.ToString();
+            ViewBag.SelectedWeek = day.SelectWeek(currentDay);
+
+            return View(salesperson);
         }
 
         public ActionResult Details(int id)
