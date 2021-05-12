@@ -19,8 +19,14 @@ namespace CapstoneProject.Controllers
             _context = context;
         }
 
-        public ActionResult Index(int addDays)
+        public ActionResult Index(double addDays)
         {
+            double currentDay = DateTime.Today.DayOfYear;
+            if (addDays != 0)
+            { 
+                currentDay = addDays;
+            }
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var salesperson = _context.Salespeople
                 .Include(s => s.Projects)
@@ -31,10 +37,16 @@ namespace CapstoneProject.Controllers
                 .Where(s => s.IdentityUserId == userId)
                 .FirstOrDefault();
             Day day = new Day();
-            var currentDay = DateTime.Today.AddDays(addDays);
-            ViewBag.Count = 0;
-            ViewBag.SelectedWeek = day.SelectWeek(addDays);
+            ViewBag.SelectedWeek = day.SelectWeek(currentDay);
+            
+            
+            
             return View(salesperson);
+
+
+
+
+
         }
 
         public ActionResult Details(int id)

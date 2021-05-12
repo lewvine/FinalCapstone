@@ -9,11 +9,12 @@ namespace CapstoneProject.Models
     {
         public string DayOfWeek { get; set; }
         public DateTime? Date { get; set; }
+        public double Count { get; set; }
 
-        public List<Day> SelectWeek(int addDays)
+        public List<Day> SelectWeek(double dayOfYear)
         {
-            var currentDay = DateTime.Today.AddDays(addDays);
-
+            int year = DateTime.Now.Year;
+            DateTime currentDay = new DateTime(year, 1, 1).AddDays(dayOfYear - 1);
             List<Day> currentWeek = new List<Day>();
             var currentDayOfWeek = currentDay.DayOfWeek.ToString();
 

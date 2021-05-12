@@ -10,11 +10,11 @@
     @* This is our day column *@
     <div class="calendar-container" style="border: 1px solid #555">
         <div class="row" style="margin-top: 2rem; padding: 2rem; border: 1px solid #555; text-align: center; background-color: #3279a8;">
-            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="-7">
+            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="@ViewBag.SelectedWeek[0].Date.AddDays(-7).DayOfYear">
                 <i class="fas fa-arrow-alt-circle-left fa-3x"></i>
             </a>
-            <h2 class="col-8" style="color: white;">Calendar for: @ViewBag.SelectedWeek[0].Date.ToString("MM/dd/yyyy") - @ViewBag.SelectedWeek[4].Date.ToString("MM/dd/yyyy")</h2>
-            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="7">
+            <h2 class="col-8" style="color: white;">Calendar for: @ViewBag.SelectedWeek[1].Date.ToString("MM/dd/yyyy") - @ViewBag.SelectedWeek[5].Date.ToString("MM/dd/yyyy")</h2>
+            <a class="col-2" style="color: white;" asp-action="Index" asp-controller="Appointment" asp-route-addDays="@ViewBag.SelectedWeek[0].Date.AddDays(7).DayOfYear">
                 <i class="fas fa-arrow-alt-circle-right fa-3x"></i>
             </a>
         </div>
