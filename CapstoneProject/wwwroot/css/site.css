@@ -1,6 +1,83 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+//Appointment styles
+
+    .calendar-container{
+        border: 1px solid #555;
+    }
+
+    .calendar-day-header h3, h4 {
+        color: #3279a8;
+    }
+
+    .calendar-header{
+        margin-top: 2rem; 
+        padding: 2rem; 
+        border: 1px solid #555;
+        text-align: center;
+        background-color: #3279a8;
+    }
+
+    .calendar-header a{
+        color: white;
+    }
+
+    .calendar-header h2{
+        color: white;
+    }
+
+    .calendar-body {
+        margin-top: 3rem;
+    }
+
+    .calendar-nottoday{
+        margin-right: 2rem;
+        padding-top: 1rem;
+    }
+    .calendar-today{
+        margin-right: 2rem;
+        background-color: #999;
+        padding-top: 1rem;
+    }
+
+    .calendar-today h3{
+        color: white !important;
+    }
+    .calendar-today h4{
+        color: white !important;
+    }
+
+
+    .calendar-today div:first-child{
+        margin-bottom: 2rem;
+    }
+
+    .appointment{
+        padding: .5rem;
+        border-radius: .25rem;
+        min-height: 6rem;
+        margin: 1rem 0;
+    }
+
+    .unbooked{
+        background-color: #555;
+    }
+
+    .booked {
+        background-color: #3279a8;
+    }
+
+    .appointment h4{
+        font-size: .875rem;
+        color: white;
+    }
+
+    .appointment p{
+        color: white;
+        font-size: .875rem;
+    }
+
 header, footer{
     background-color: #3279a8;
     color: white;
