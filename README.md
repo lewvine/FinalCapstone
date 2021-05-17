@@ -23,10 +23,9 @@ Please reach of to me on LinkedIn https://www.linkedin.com/in/lewis-vine/ or e-m
 
 ## Images: 
 
-Salesperson Home | Salesperson Calendar UI
+Salesperson Calendar UI | Salesperson Home
 ---------------- | -----------------------
-![salesperson_portal](https://user-images.githubusercontent.com/39601384/118504944-f5177800-b6f9-11eb-8769-ae9a535a68e1.PNG) | ![appointments_dashboard](https://user-images.githubusercontent.com/39601384/118505385-5ccdc300-b6fa-11eb-9df2-7e9000b0c145.PNG)
-
+![appointments_dashboard](https://user-images.githubusercontent.com/39601384/118505385-5ccdc300-b6fa-11eb-9df2-7e9000b0c145.PNG) | ![salesperson_portal](https://user-images.githubusercontent.com/39601384/118504944-f5177800-b6f9-11eb-8769-ae9a535a68e1.PNG)
 Customer Landing | Project Details
 ---------------- | ---------------
 ![homepage](https://user-images.githubusercontent.com/39601384/118506707-8e935980-b6fb-11eb-8010-20d13c4160c8.PNG) |![project_details](https://user-images.githubusercontent.com/39601384/118506749-96eb9480-b6fb-11eb-84db-003635d825fe.PNG)
