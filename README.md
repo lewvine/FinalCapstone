@@ -17,4 +17,4 @@ Technologies used:
 Project status:
 I'm currently in the process of refactoring the project to better implement best practices.  Some to-do's include: (1) implementing inheritance for some of the functionality that my salesperson and customer model's share, (2) finalizing my calendar UI and integrating it fully into the rest of my workflow, (3) making the application responsive, (4) implementing unit testing, (5), deploying the application on a live server.
 
-Please reach of to me on LinkedIn or e-mail me @ lew.vine@gmail.com if you have any questions!
+Please reach of to me on LinkedIn https://www.linkedin.com/in/lewis-vine/ or e-mail me @ lew.vine@gmail.com if you have any questions!
