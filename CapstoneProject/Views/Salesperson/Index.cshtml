@@ -7,7 +7,7 @@
         </ul>
     </div>
 </div>
-<div class="row">
+<div class="row" style="min-height: 672px;">
     <div class="col-9 page-section">
         @* This is our day column *@
         <div class="calendar-container">
@@ -35,23 +35,44 @@
                             <div>
                                 @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
                                 {
-                                    @if (appt.IsBooked == true)
+                                    @if (appt.IsBooked == true && appt.IsCompleted == false && appt.AppointmentEnd.Date > DateTime.Now.Date)
                                     {
-                                     <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
-                                        <div class="appointment booked">
-                                            <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
-                                            <p>@appt.Project.StreetAddress</p>
-                                        </div>
-                                     </a>
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment booked">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>BOOKED</h4>
+                                                <p>@appt.Project.StreetAddress</p>
+                                            </div>
+                                        </a>
                                     }
-                                    else
+                                    @if (appt.IsBooked == false && appt.IsCompleted == false)
                                     {
-                                     <a asp-action="BookOpenAppointment" asp-controller="Appointment" asp-route-id="@appt.id">
-                                        <div class="appointment unbooked">
-                                            <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
-                                            <p>Open</p>
-                                        </div>
-                                     </a>
+                                        <a asp-action="BookOpenAppointment" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment unbooked">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>OPEN</h4>
+                                            </div>
+                                        </a>
+                                    }
+                                    @if (appt.IsCompleted == true)
+                                    {
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment completed">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>COMPLETED</h4>
+                                                <p>@appt.Project.StreetAddress</p>
+                                            </div>
+                                        </a>
+                                    }
+                                    @if (appt.IsCompleted == false && appt.IsBooked == true && appt.AppointmentEnd.Date < DateTime.Now.Date)
+                                    {
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment overdue">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>COMPLETED</h4>
+                                                <p>@appt.Project.StreetAddress</p>
+                                            </div>
+                                        </a>
                                     }
                                 }
                             </div>
@@ -68,21 +89,42 @@
                             <div>
                                 @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
                                 {
-                                    @if (appt.IsBooked == true)
+                                    @if (appt.IsBooked == true && appt.IsCompleted == false && appt.AppointmentEnd > DateTime.Now.Date)
                                     {
                                         <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
                                             <div class="appointment booked">
                                                 <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>BOOKED</h4>
                                                 <p>@appt.Project.StreetAddress</p>
                                             </div>
                                         </a>
                                     }
-                                    else
+                                    @if (appt.IsBooked == false && appt.IsCompleted == false && appt.AppointmentEnd.Date > DateTime.Now.Date)
                                     {
                                         <a asp-action="BookOpenAppointment" asp-controller="Appointment" asp-route-id="@appt.id">
                                             <div class="appointment unbooked">
                                                 <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
-                                                <p>Open</p>
+                                                <h4>OPEN</h4>
+                                            </div>
+                                        </a>
+                                    }
+                                    @if (appt.IsCompleted == true)
+                                    {
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment completed">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>COMPLETED</h4>
+                                                <p>@appt.Project.StreetAddress</p>
+                                            </div>
+                                        </a>
+                                    }
+                                    @if (appt.IsCompleted == false && appt.IsBooked == true && appt.AppointmentEnd.Date < DateTime.Now.Date)
+                                    {
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment overdue">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <h4>OVERDUE</h4>
+                                                <p>@appt.Project.StreetAddress</p>
                                             </div>
                                         </a>
                                     }

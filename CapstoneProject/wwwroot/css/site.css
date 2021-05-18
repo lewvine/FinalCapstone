@@ -82,6 +82,14 @@ for details on configuring this project to bundle and minify static web assets. 
         background-color: #3279a8;
     }
 
+    .completed{
+        background-color: darkgreen;
+    }
+
+    .overdue{
+        background-color: red;
+    }
+
     .appointment h4{
         font-size: .875rem;
         color: white;
