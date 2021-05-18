@@ -1,0 +1,59 @@
+﻿@model CapstoneProject.Models.Appointment
+
+@{
+    ViewData["Title"] = "BookOpenAppointment";
+}
+
+<div class="page-section">
+    <div class="heading-container">
+        <h1>Book Open Appointment</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <h3>@Model.AppointmentStart.Date.DayOfWeek @Model.AppointmentStart.ToString("MMMM dd, yyyy") </h3>
+            <h3>@Model.AppointmentStart.ToString("h:mm") - @Model.AppointmentEnd.ToString("h:mm")</h3>
+        </div>
+        <form asp-action="BookOpenAppointment">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <div class="form-group">
+                <select asp-for="ProjID" class="form-control">
+                    <option value="">Project</option>
+                    @foreach (Project project in ViewBag.Projects)
+                    {
+                        <option value=@project.id>@project.Name</option>
+                    }
+                </select>
+                <label asp-for="ProjID" class="control-label">Select a Project</label>
+            </div>
+            <div class="form-group">
+                <select asp-for="InteractionType" class="form-control">
+                    <option value="">Interaction Type</option>
+                    <option value="initial">Initial consultation</option>
+                    <option value="followup">In person follow-up</option>
+                    <option value="phone">Phone call</option>
+                </select>
+                <label asp-for="ProjID" class="control-label">Select an interaction type</label>
+                <span asp-validation-for="InteractionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Notes" class="form-control" />
+                <label asp-for="Notes" class="control-label"></label>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

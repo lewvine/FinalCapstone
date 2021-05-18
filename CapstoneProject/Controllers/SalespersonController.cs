@@ -21,8 +21,13 @@ namespace CapstoneProject.Controllers
             _context = context;
         }
         // GET: SalespersonController
-        public ActionResult Index()
+        public ActionResult Index(double addDays)
         {
+            double currentDay = DateTime.Today.DayOfYear;
+            if (addDays != 0)
+            {
+                currentDay = addDays;
+            }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var salesperson = _context.Salespeople
                 .Include(s => s.Projects)
@@ -58,6 +63,8 @@ namespace CapstoneProject.Controllers
                 .Select(p => p.Cost).Sum();
 
             ViewBag.CloseRate = Math.Round((Convert.ToDouble(salesperson.TotalProjects) / Convert.ToDouble(salesperson.TotalOpportunities)) * 100);
+            Day day = new Day();
+            ViewBag.SelectedWeek = day.SelectWeek(currentDay);
             if (salesperson == null)
             {
                 return RedirectToAction("Create");

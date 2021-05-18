@@ -3,45 +3,106 @@
     <div class="heading-container">
         <h1>Sales Dashboard</h1>
         <ul>
-            <li><a href="#my-profile">My Profile</a></li>
-            <li><a href="#booked-appointments">Booked Appointments</a></li>
-            <li><a href="#unbooked-appointments">Unbooked Appointments</a></li>
-            <li><a href="#completed-appointments">Completed Appointments</a></li>
-            <li><a href="#current-opportunities">Current Opportunities</a></li>
-        </ul>
-    </div>
-</div>
-<div class="page-section">
-    <div class="heading-container">
-        <h2 id="my-profile">My Profile</h2>
-        <ul>
             <li><a asp-action="Edit" asp-route-id="@Model.id">Edit Profile</a></li>
         </ul>
     </div>
-    <div class="row">
-        <div class="col-4">
-            <div class="data">
-                <p>@Model.FirstName @Model.LastName</p>
-                <p>Name</p>
+</div>
+<div class="row">
+    <div class="col-9 page-section">
+        @* This is our day column *@
+        <div class="calendar-container">
+            <div class="row calendar-header">
+                <a class="col-2" asp-action="Index" asp-controller="Salesperson" asp-route-addDays="@ViewBag.SelectedWeek[0].Date.AddDays(-7).DayOfYear">
+                    <i class="fas fa-arrow-alt-circle-left fa-2x"></i>
+                </a>
+                <h2 class="col-8">Calendar for: @ViewBag.SelectedWeek[1].Date.ToString("MM/dd/yyyy") - @ViewBag.SelectedWeek[5].Date.ToString("MM/dd/yyyy")</h2>
+                <a class="col-2" asp-action="Index" asp-controller="Salesperson" asp-route-addDays="@ViewBag.SelectedWeek[0].Date.AddDays(7).DayOfYear">
+                    <i class="fas fa-arrow-alt-circle-right fa-2x"></i>
+                </a>
             </div>
-            <div class="data">
-                <p>@Model.PhoneNumber</p>
-                <p>Phone</p>
-            </div>
-            <div class="data">
-                <p>@Model.EMailAddress</p>
-                <p>E-Mail</p>
-            </div>
-            <div class="data">
-                <p>@Model.StreetAddress, @Model.CityAddress, @Model.StateAddress, @Model.ZipAddress</p>
-                <p>Address</p>
+            <div id="calendar" class="row calendar-body">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    //If current day
+                    @if (@ViewBag.SelectedWeek[i].Date == DateTime.Today)
+                    {
+                        <div class="calendar-today">
+                            <div class="calendar-day-header">
+                                <h3>
+                                    @ViewBag.SelectedWeek[i].Date.DayOfWeek<br /> @ViewBag.SelectedWeek[i].Date.ToString("MM/dd/yyyy")
+                                </h3>
+                            </div>
+                            <div>
+                                @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
+                                {
+                                    @if (appt.IsBooked == true)
+                                    {
+                                     <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                        <div class="appointment booked">
+                                            <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                            <p>@appt.Project.StreetAddress</p>
+                                        </div>
+                                     </a>
+                                    }
+                                    else
+                                    {
+                                     <a asp-action="BookOpenAppointment" asp-controller="Appointment" asp-route-id="@appt.id">
+                                        <div class="appointment unbooked">
+                                            <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                            <p>Open</p>
+                                        </div>
+                                     </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="calendar-nottoday">
+                            <div class="calendar-day-header">
+                                <h3>
+                                    @ViewBag.SelectedWeek[i].Date.DayOfWeek<br /> @ViewBag.SelectedWeek[i].Date.ToString("MM/dd/yyyy")
+                                </h3>
+                            </div>
+                            <div>
+                                @foreach (Appointment appt in Model.Appointments.Where(a => a.AppointmentStart.Date == ViewBag.SelectedWeek[i].Date).OrderBy(a => a.AppointmentStart).ToList())
+                                {
+                                    @if (appt.IsBooked == true)
+                                    {
+                                        <div class="appointment booked">
+                                            <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <p>Booked</p>
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="BookOpenAppointment" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment unbooked">
+                                                <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
+                                                <p>Open</p>
+                                            </div>
+                                        </a>
+                                    }
+                                 }
+                                    </div>
+                        </div>
+                    }
+                }
             </div>
         </div>
-        <div class="row col-8">
-            <div class="col-8" style="width: 100%;">
-                <canvas style="min-height: 300px; min-width: 300px;" class="col-6" id="salesStats"></canvas>
-            </div>
-            <div class="col-4">
+    </div>
+    <div class="col-3 page-section">
+        <div class="calendar-header">
+            <h2>My Statistics</h2>
+        </div>
+        <div>
+            @*<div style="width: 100%;">
+                <canvas id="salesStats"></canvas>
+            </div>*@
+            <div>
                 <div class="data display">
                     <p>$@ViewBag.CurrentMonthSales<sup>.00</sup></p>
                     <p>Trailing 30 Sales</p>
@@ -56,96 +117,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="page-section">
-    <div onclick="Toggle(this)" id="booked-appointments" class="heading-container">
-        <h2 id="booked-appointments">Booked Appointments</h2>
-    </div>
-    <div>
-        @if (@Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).ToList().Count() == 0)
-        {
-            <div class="row data">
-                <p class="col-3">No appointments</p>
-            </div>
-        }
-        else
-        {
-            <div class="row data-header">
-                <p class="col-3">Date</p>
-                <p class="col-3">Time</p>
-            </div>
-            @foreach (Appointment appt in @Model.Appointments.Where(a => a.ProjID != null && a.IsCompleted == false).OrderBy(a=>a.AppointmentStart).ToList())
-            {
-
-                <div class="row data-row">
-                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
-                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
-                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
-                    <p class="col-3"><a asp-action="Delete" asp-controller="Appointment" asp-route-id="@appt.id">Cancel</a></p>
-                </div>
-            }
-        }
-    </div>
-</div>
-<div class="page-section">
-    <div onclick="Toggle(this)" class="heading-container">
-        <h2 id="unbooked-appointments">Unbooked Appointments</h2>
-        <ul>
-            <li><a asp-action="CreateAppointments" asp-controller="Salesperson" asp-route-id="@Model.id">Create Appointments</a></li>
-        </ul>
-    </div>
-    <div>
-        @if (@Model.Appointments.Where(a => a.IsOpen == true).ToList().Count() == 0)
-        {
-            <div class="row data">
-                <p class="col-3">No open appointments</p>
-            </div>
-        }
-        else
-        {
-            <div class="row data-header">
-                <p class="col-3">Date</p>
-                <p class="col-3">Time</p>
-            </div>
-            @foreach (Appointment appt in @Model.Appointments.Where(a => a.IsOpen == true).OrderBy(a => a.AppointmentStart).ToList())
-            {
-                <div class="row data-row">
-                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
-                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
-                </div>
-            }
-        }
-    </div>
-</div>
-<div class="page-section">
-    <div onclick="Toggle(this)" class="heading-container">
-        <h2 id="completed-appointments">Completed Appointments</h2>
-    </div>
-    <div>
-        @if (@Model.Appointments.Where(a => a.IsCompleted == true).ToList().Count() == 0)
-        {
-            <div class="row data">
-                <p class="col-3">No completed appointments</p>
-            </div>
-        }
-        else
-        {
-            <div class="row data-header">
-                <p class="col-3">Date</p>
-                <p class="col-3">Time</p>
-                <p class="col-3">Project</p>
-            </div>
-            @foreach (Appointment appt in @Model.Appointments.Where(a => a.IsCompleted == true).OrderBy(a => a.AppointmentStart).Reverse().ToList())
-            {
-                <div class="row data-row">
-                    <p class="col-3">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>
-                    <p class="col-3">@appt.AppointmentStart.ToString("h:mm tt") - @appt.AppointmentEnd.ToString("h:mm tt")</p>
-                    <p class="col-3">@appt.Project.Name</p>
-                    <p class="col-3"><a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">Details</a></p>
-                </div>
-            }
-        }
     </div>
 </div>
 <div class="page-section">

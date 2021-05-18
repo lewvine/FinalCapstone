@@ -38,15 +38,32 @@ namespace CapstoneProject.Controllers
                 .FirstOrDefault();
             Day day = new Day();
             ViewBag.SelectedWeek = day.SelectWeek(currentDay);
-            
-            
-            
+
             return View(salesperson);
+        }
 
+        [HttpGet]
+        public ActionResult BookOpenAppointment(int id)
+        {
+            Appointment appt = _context.Appointments.Where(a => a.id == id).FirstOrDefault();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Salesperson salesperson = _context.Salespeople.Where(s => s.IdentityUserId == userId).FirstOrDefault();
+            ViewBag.Projects = _context.Projects.Where(p => p.Salesperson.id == salesperson.id).ToList();
+            return View(appt);
+        }
 
-
-
-
+        [HttpPost]
+        public ActionResult BookOpenAppointment(Appointment appt)
+        {
+            Appointment apptInDB = _context.Appointments.Where(a => a.id == appt.id).FirstOrDefault();
+            apptInDB.IsBooked = true;
+            apptInDB.IsCompleted = false;
+            apptInDB.IsOpen = false;
+            apptInDB.ProjID = appt.ProjID;
+            apptInDB.InteractionType = appt.InteractionType;
+            apptInDB.Notes = appt.Notes;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Details(int id)

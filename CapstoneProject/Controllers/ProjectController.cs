@@ -59,7 +59,6 @@ namespace CapstoneProject.Controllers
             project.SendText(body);
             return RedirectToAction("Index", "Home");
         }
-
         public ActionResult ConvertToSale(int id)
         {
             Project project = _context.Projects.Include(a=>a.Appointments).Include(p => p.Salesperson).Where(p => p.id == id).FirstOrDefault();
