@@ -70,12 +70,12 @@
                                 {
                                     @if (appt.IsBooked == true)
                                     {
-                                        <div class="appointment booked">
-                                            <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                        <a asp-action="Details" asp-controller="Appointment" asp-route-id="@appt.id">
+                                            <div class="appointment booked">
                                                 <h4>@appt.AppointmentStart.ToString("h:mm") - @appt.AppointmentEnd.ToString("h:mm")</h4>
-                                                <p>Booked</p>
-                                            </a>
-                                        </div>
+                                                <p>@appt.Project.StreetAddress</p>
+                                            </div>
+                                        </a>
                                     }
                                     else
                                     {
@@ -86,8 +86,8 @@
                                             </div>
                                         </a>
                                     }
-                                 }
-                                    </div>
+                                }
+                            </div>
                         </div>
                     }
                 }

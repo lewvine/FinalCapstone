@@ -60,6 +60,20 @@ for details on configuring this project to bundle and minify static web assets. 
         margin: 1rem 0;
     }
 
+    .appointment:hover{
+        transform: scale(1.05);
+        transition: transform .25s;
+        cursor: pointer;
+    }
+
+    .calendar-nottoday a:hover{
+        text-decoration: none !important;
+    }
+
+    .calendar-today a:hover{
+        text-decoration: none;
+    }
+
     .unbooked{
         background-color: #555;
     }
