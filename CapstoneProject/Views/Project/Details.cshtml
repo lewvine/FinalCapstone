@@ -105,7 +105,7 @@
         }
         else
         {
-            @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false))
+            @foreach (Appointment appt in Model.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false && a.AppointmentStart > DateTime.Now))
             {
                 <div class="row data-row">
                     <p class="col-3">@appt.AppointmentStart.DayOfWeek , @appt.AppointmentStart.ToString("MMMM d yyyy")</p>
@@ -128,7 +128,7 @@
         <div class="heading-container">
             <h2>Schedule an Appointment:</h2>
         </div>
-        @foreach (Appointment appt in Model.Salesperson.Appointments.Where(a => a.IsOpen).ToList().OrderBy(a => a.AppointmentStart))
+        @foreach (Appointment appt in Model.Salesperson.Appointments.Where(a => a.IsOpen && a.AppointmentStart > DateTime.Now).ToList().OrderBy(a => a.AppointmentStart))
         {
     <div class="row data-row">
         <p class="col-3" asp-for="Model.Appointments">@appt.AppointmentStart.ToString("dddd, MMMM d, yyyy")</p>

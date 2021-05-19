@@ -64,7 +64,7 @@ namespace CapstoneProject.Controllers
             Project project = _context.Projects.Include(a=>a.Appointments).Include(p => p.Salesperson).Where(p => p.id == id).FirstOrDefault();
             var salesperson = _context.Salespeople.Where(s => s.id == project.SalesID).Include(s=>s.Appointments).FirstOrDefault();
             project.IsSold = true;
-            var OpenAppointments = project.Appointments.Where(a => a.IsBooked == true).ToList();
+            var OpenAppointments = project.Appointments.Where(a => a.IsBooked == true && a.IsCompleted == false).ToList();
             foreach(Appointment appt in OpenAppointments)
             {
                 appt.IsOpen = true;

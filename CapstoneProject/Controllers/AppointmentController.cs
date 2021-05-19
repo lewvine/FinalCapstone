@@ -42,13 +42,51 @@ namespace CapstoneProject.Controllers
             return View(salesperson);
         }
 
+        public ActionResult AddAppointments(int id)
+        {
+            int dayOfYear = id;
+            int year = DateTime.Now.Year;
+            DateTime date = new DateTime(year, 1, 1).AddDays(dayOfYear - 1);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var salesperson = _context.Salespeople.Include(s=>s.Appointments).Where(s => s.IdentityUserId == userId).FirstOrDefault();
+            var appointments = _context.Appointments;
+            for (int i = 0; i < 4; i++)
+            {
+                int start = 8 + (i * 2);
+                int end = 10 + (i * 2);
+                Appointment appt = new Appointment()
+                {
+                    AppointmentStart = date.AddHours(start),
+                    AppointmentEnd = date.AddHours(end),
+                    Notes = "This appointment is open",
+                    InteractionType = "Nothing to show",
+                    IsOpen = true,
+                    IsBooked = false,
+                    IsCompleted = false
+                };
+                bool value = _context.Appointments.Where(a => a.AppointmentStart == appt.AppointmentStart).Any();
+                if (value == true)
+                {
+                    continue;
+                }
+                else
+                {
+                    appointments.Add(appt);
+                    _context.SaveChanges();
+                    salesperson.Appointments.Add(appt);
+                    _context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index", "Salesperson");
+        }
+
         [HttpGet]
         public ActionResult BookOpenAppointment(int id)
         {
             Appointment appt = _context.Appointments.Where(a => a.id == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Salesperson salesperson = _context.Salespeople.Where(s => s.IdentityUserId == userId).FirstOrDefault();
-            ViewBag.Projects = _context.Projects.Where(p => p.Salesperson.id == salesperson.id).ToList();
+            ViewBag.Projects = _context.Projects.Where(p => p.Salesperson.id == salesperson.id && p.IsSold == false).ToList();
             return View(appt);
         }
 
