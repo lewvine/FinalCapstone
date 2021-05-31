@@ -1,7 +1,9 @@
 # FinalCapstone: LawnPros
 
 ## Introduction:
-This project is my individual capstone for my devCodeCamp software development course.  
+This project is my individual capstone for my devCodeCamp software development course.  I've deployed it via AWS Elastic Beanstalk, here: 
+http://lawnpros-dev.us-west-2.elasticbeanstalk.com/
+(Still working through responsiveness on phones and tablets).
 
 ## What it is: 
 LawnPros is a web application for a fictious landscape company that allows customers to enter some basic information and start a landscape project.  Customers can then make and cancel appointments via a customer portal.  On the employee side, salespeople can view customers, appointments, and projects.  Some cool features I wanted to implement were: a calendar UI for the salesperson, data visualization with Chart.JS, and SMS notifications with Twilio's text API.  I utilized Identity for user registration and login.  
